@@ -1,0 +1,22 @@
+components:
+  schemas:
+    ErrorSchema:
+      type: object
+      properties:
+        message:
+          type: string
+        data:
+          type: object
+          example: {}
+        status:
+          type: number
+
+  responses:
+    ErrorResponse:
+      content:
+        application/json:
+          schema: 
+            $ref: '#/components/schemas/ErrorSchema'
+        application/xml: 
+          schema: 
+            $ref: '#/components/schemas/ErrorSchema'

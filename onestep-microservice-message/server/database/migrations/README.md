@@ -1,0 +1,1 @@
+Rule 1: when using migration (up) to split value of one key, $unset the old key. because when update the old key will not success.

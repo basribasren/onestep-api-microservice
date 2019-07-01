@@ -1,0 +1,35 @@
+paths:
+  /api/v1/email/send-email:
+    summary: Represents a email
+    description: >
+      This resource represents an send email in the system.
+      Each user is identified by a numeric `id`.
+    post:
+      tags: 
+        - Email
+      deprecated: false
+      summary: Send Confirmation Email
+      description: >
+        A detailed description of the operation.
+        Use markdown for rich text representation,
+        such as **bold**, *italic*, and [links](https://swagger.io).
+      requestBody:
+        description: username and email is required to be sendmail
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/EmailSchema'
+          application/xml:
+            schema:
+              $ref: '#/components/schemas/EmailSchema'
+      responses:
+        '200':
+          description: Request Success
+          $ref: '#/components/responses/EmailSuccess'
+        '401':
+          description: Authorization information is missing or invalid.
+          $ref: '#/components/responses/ErrorResponse'
+        '5XX': 
+          description: Internal server error
+          $ref: '#/components/responses/ErrorResponse'

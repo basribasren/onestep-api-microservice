@@ -1,0 +1,84 @@
+paths:
+  /api/v1/user/:
+    get:
+      tags: 
+        - User
+      deprecated: false
+      summary: Get all list user
+      description: >
+        A list of the user.
+      security:
+        - ApiKeyAuth: []
+      responses:
+        '200':
+          description: Request Success
+        '401':
+          description: Authorization information is missing or invalid.
+        '5XX': 
+          description: Internal server error
+
+  /api/v1/user/{username}:
+    parameters:
+      - in: path
+        name: username
+        schema:
+          type: string
+        required: true
+        description: the username
+    get:
+      tags: 
+        - User
+      deprecated: false
+      summary: Get user by username
+      description: >
+        A detail user of the user.
+      responses:
+        '200':
+          description: Request Success
+        '401':
+          description: Authorization information is missing or invalid.
+        '5XX': 
+          description: Internal server error
+
+    put:
+      tags: 
+        - User
+      deprecated: false
+      summary: Update user by username
+      description: >
+        Update a user of the user.
+      requestBody:
+        description: id, username, email, and verified is required
+        required: true
+        content:
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/UserSchema'
+          application/json:
+            schema:
+              $ref: '#/components/schemas/UserSchema'
+          application/xml:
+            schema:
+              $ref: '#/components/schemas/UserSchema'
+      responses:
+        '200':
+          description: Request Success
+        '401':
+          description: Authorization information is missing or invalid.
+        '5XX': 
+          description: Internal server error
+
+    delete:
+      tags: 
+        - User
+      deprecated: false
+      summary: Delte user by username
+      description: >
+        Delte a user of the user.
+      responses:
+        '200':
+          description: Request Success
+        '401':
+          description: Authorization information is missing or invalid.
+        '5XX': 
+          description: Internal server error

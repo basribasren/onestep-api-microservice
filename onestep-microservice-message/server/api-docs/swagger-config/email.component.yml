@@ -1,0 +1,59 @@
+components:
+  schemas:    
+    EmailSchema:
+      type: object
+      properties:
+        receiver:
+          type: string
+          example: basri.basreen@gmail.com
+        title:
+          type: string
+          example: example title email
+        content: 
+          type: string
+          example: example content email
+        type: 
+          type: string
+          enum: [amp, html, text]
+          example: text
+      required:
+        - receiver
+        - title
+
+    EmailPayload:
+      type: object
+      properties:
+        data:
+          type: object
+          properties:
+            id:
+              type: string
+              example: <20190610134152.1.E03C9F9BBC34551A@sandboxf8f4f16ec49e44568db3f12c4397e507.mailgun.org>
+            message:
+              type: string
+              example: Queued. Thank you.
+            messageId:  
+              type: string
+              example: <20190610134152.1.E03C9F9BBC34551A@sandboxf8f4f16ec49e44568db3f12c4397e507.mailgun.org>
+        status:
+          type: number
+          example: 200
+        message:
+          type: string
+          example: Email <20190610134152.1.E03C9F9BBC34551A@sandboxf8f4f16ec49e44568db3f12c4397e507.mailgun.org> has been send
+        type:
+          type: string
+          example: Request Success
+        header:
+          type: object
+          example: {}
+
+  responses:
+    EmailSuccess:
+      content:
+        application/json:
+          schema: 
+            $ref: '#/components/schemas/EmailPayload'
+        application/xml: 
+          schema: 
+            $ref: '#/components/schemas/EmailPayload'
