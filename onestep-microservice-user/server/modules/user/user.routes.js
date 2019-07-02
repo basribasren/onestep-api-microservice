@@ -8,7 +8,7 @@ const helper = require('../../helpers/auth.helper.js');
 router.get('/', helper.verifyToken, ACL, userController.list);
 
 // POST /api/v1/user/
-router.post('/', helper.verifyToken, ACL, userController.create);
+router.post('/', userController.create);
 
 // GET /api/v1/user/:username
 router.get('/:username', helper.verifyToken, ACL, userController.get);

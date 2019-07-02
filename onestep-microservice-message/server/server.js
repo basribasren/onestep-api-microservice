@@ -7,11 +7,14 @@ import dotenv from 'dotenv'
 import mongoose from './configs/mongoose.config.js'
 import swagger from './configs/swagger.config.js'
 import init from './configs/express.config.js'
+import twilio from './configs/twilio.config.js'
+import amqp from './configs/amqplib.config.js'
 /** import routes */
 import email from './modules/email/email.routes.js'
-import sms from './modules/sms/sms.routes.js'
+// import sms from './modules/sms/sms.routes.js'
 /** import helpers */
 import gateway from './helpers/gateway.helper.js'
+import * as amqpHelper from './helpers/amqplib.helper.js'
 
 const app = express()
 
@@ -42,12 +45,29 @@ const mongooseConnection = mongoose()
 
 /**
  *  ******************************************************************
+ *  amqp configuration and set as global variabel
+ *  ******************************************************************
+ */
+let connection = amqp.createConnection();
+let channel = amqp.createChannel(connection)
+let queue = amqp.createQueue(channel, 'message-queue')
+
+app.set('amqp.connection', connection)
+app.set('amqp.channel', channel)
+
+/**
+ *  ******************************************************************
  *  set variabel
  *  ******************************************************************
  */
 const STATIC_FOLDER = 'client/dist'
 const STATIC_SWAGGER = 'api-docs/swagger-ui'
 
+const twilioClient = twilio(isProduction)
+app.use((req, res, next) => {
+	req.twilio = twilioClient
+	next()
+})
 /**
  *  ******************************************************************
  *  express default configuration
@@ -89,7 +109,13 @@ app.use('/api/v1/swagger', serveStatic(path.resolve(__dirname, STATIC_SWAGGER)))
  *  ******************************************************************
  */
 app.use('/api/v1/email', email)
-app.use('/api/v1/sms', sms)
+// app.use('/api/v1/sms', sms)
+
+amqpHelper.consume({
+	connection: connection,
+	channel: channel,
+	queueName: 'message-queue'
+})
 
 /**
  * error handler when url not found

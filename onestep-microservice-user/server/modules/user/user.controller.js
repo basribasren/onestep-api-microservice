@@ -1,6 +1,8 @@
 const userService = require('./user.service.js');
 const helper = require('../../helpers/user.helper.js');
+const amqpHelper = require('../../helpers/amqplib.helper.js');
 const redis = require('../../configs/redis.config.js');
+
 const client = redis();
 
 /**
@@ -89,6 +91,12 @@ const userController = {
             })
             .then((result) => {
                 delete result.password;
+                // send information to message-service by message-queue
+                amqpHelper.send({
+                    connection: req.app.get('amqp.connection'),
+                    channel: req.app.get('amqp.channel'),
+                    queueName: 'message-queue',
+                }, result)
                 res.status(201).send({
                     message: 'create user success',
                     data: result,

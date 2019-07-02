@@ -32,7 +32,20 @@ const mysql = require('./configs/sequelize.config.js')();
 const redis = require('./configs/redis.config.js')();
 const swagger = require('./configs/swagger.config.js')();
 const passport = require('./configs/passport.config.js')();
+const amqp = require('./configs/amqplib.config.js');
 require('./configs/express.config.js')(app, redis, passport);
+
+/**
+ *  ******************************************************************
+ *  amqp configuration and set as global variabel
+ *  ******************************************************************
+ */
+let connection = amqp.createConnection();
+let channel = amqp.createChannel(connection)
+let queue = amqp.createQueue(channel, 'message-queue')
+
+app.set('amqp.connection', connection)
+app.set('amqp.channel', channel)
 
 /**
  * ******************************************************************

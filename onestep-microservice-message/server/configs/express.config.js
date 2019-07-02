@@ -6,7 +6,7 @@ import helmet from 'helmet'
 import cookieParser from 'cookie-parser'
 import responseTime from 'response-time'
 
-const expressConfig = (app) => {
+const expressConfig = app => {
 	try {
 		// Compress all responses
 		app.use(compression())
