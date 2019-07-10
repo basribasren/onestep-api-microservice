@@ -11,14 +11,15 @@ module.exports = function (passport, userService, helper) {
 			// console.log(accessToken)
 			// console.log(refreshToken)
 			// console.log(profile)
-			// _json:
-			// {
-			// 	id: '690592054687733',
-			// 	name: 'Basri Offi',
-			// 	email: 'basri.official.acc@gmail.com',
-			// 	first_name: 'Basri',
-			// 	last_name: 'Offi'
-			// }
+			/** _json:
+			{
+				id: '690592054687733',
+				name: 'Basri Offi',
+				email: 'basri.official.acc@gmail.com',
+				first_name: 'Basri',
+				last_name: 'Offi'
+			}
+			*/
 			const data = {
 				username: profile._json.email,
 				email: profile._json.email,

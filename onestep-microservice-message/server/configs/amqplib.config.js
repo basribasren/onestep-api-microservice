@@ -1,4 +1,4 @@
-import amqp from 'amqplib'
+const amqp = require('amqplib');
 /**
  * command to get list plugins: rabbitmq-plugins list
  * command to acrive GUI: rabbitmq-plugins enable rabbitmq_management 
@@ -15,10 +15,10 @@ const createConnection = async () => {
   try {
     const connection = await amqp.connect({
       protocol: 'amqp',
-      hostname: 'localhost',
-      port: 5672,
-      username: 'guest',
-      password: 'guest',
+      hostname: process.env.AMQP_HOST,
+      port: process.env.AMQP_PORT,
+      username: process.env.AMQP_USER,
+      password: process.env.AMQP_PASS,
       locale: 'en_US',
       frameMax: 0,
       heartbeat: 0,

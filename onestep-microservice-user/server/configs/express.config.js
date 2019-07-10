@@ -30,19 +30,25 @@ const init = (app, connection, passport) => {
 		app.use(helmet());
 		// Records the response time for requests in HTTP servers {x-response-time →376.293ms}
 		app.use(responseTime());
-		// Session data is not saved in the cookie itself, just the session ID.
-		// Session data is stored server-side
-		// session(app, connection);
-		// initialize passport. this is required, after you set up passport 
-		// but BEFORE you use passport.session (if using)
+		/** 
+		 * Session data is not saved in the cookie itself, just the session ID.
+		 * Session data is stored server-side 
+		 **###session(app, connection);
+		 */
+		/**
+		 * initialize passport. this is required, after you set up passport
+		 * but BEFORE you use passport.session (if using)
+		 **/
 		app.use(passport.initialize());
-		// only required if using sessions. this will add middleware from passport
-		// that will serialize/deserialize the user from the session cookie and add
-		// them to req.user
-		// app.use(passport.session());
+		/**
+		 * only required if using sessions. this will add middleware from passport
+		 * that will serialize/deserialize the user from the session cookie and add
+		 * them to req.user
+		 **###app.use(passport.session());
+		 */
 		return app
 	} catch (err) {
-		console.log('Error while trying init express configuration')
+		console.log('[Express] Error while trying init express configuration')
 		return app
 	}
 }

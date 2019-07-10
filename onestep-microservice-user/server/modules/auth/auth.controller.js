@@ -2,6 +2,42 @@ const user = require('../user/user.service.js');
 const helper = require('../../helpers/user.helper.js');
 
 const authController = {
+    verifyEmail: (req, res, next) => {
+        // how to verify
+    },
+
+    /**
+     * user mengklik link pada email yang telah dikirimkan
+     * sistem mengambil data pada param jwt
+     * user memasukkan password baru
+     * user memasukkan confirm password
+     * user mengklik button change password
+     * sistem membuat hash dari password
+     * sistem mengupdate account by email
+     */
+    // [POST] http://localhost:3000/api/v1/auth/change-password/:jwt<account>
+    changePassword: (req, res, next) => {
+        let data = helper.verifyToken(req.params.jwt)
+        helper.generatePassword(req.body.newPassword)
+            .then(hash => {
+                return user.update(data.user.email)
+            })
+            .then(account => {
+                delete account.password
+                res.status(201).send({
+                    message: 'please check your email for reset the password',
+                    data: account,
+                });
+            })
+            .catch(err => next(err))
+    },
+
+    changeUsername: (req, res, next) => {
+        // how to change username
+    },
+    changeRole: (req, res, next) => {
+        // how to change role
+    },
     /**
      * LOGIN - SKENARIO
      * @skenario 2 - get user by username
@@ -27,12 +63,7 @@ const authController = {
                     res.status(200).send({
                         message: 'login success!',
                         data: {
-                            token: token,
-                            host: req.headers.host,
-                            cookie: req.headers.cookie,
-                            baseUrl: req.baseUrl,
-                            originalUrl: req.originalUrl,
-                            originalMethod: req.originalMethod
+                            token: token
                         },
                     });
                 } else {

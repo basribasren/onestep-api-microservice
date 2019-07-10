@@ -5,7 +5,7 @@ const logger = require('../helpers/logger.helper.js');
 const userService = (app, token) => {
 	try {
 		const userProxy = proxy({
-			target: 'http://localhost:3000',
+			target: process.env.USER_PATH,
 			changeOrigin: true,
 			logLevel: 'debug',
 			onProxyReq: (proxyReq, req) => {

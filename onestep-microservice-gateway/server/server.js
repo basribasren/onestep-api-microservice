@@ -28,14 +28,14 @@ app.use((req, res, next) => {
 
 /**
  * ******************************************************************
- * set application performance monitoring
+ * set application performance monitoring (APM)
  * ******************************************************************
  */
 const apm = require('./profiling/elastic.apm.js')(isProduction, logger);
 
 /**
  *  ******************************************************************
- *  connnection to redis
+ *  connnection to redis for caching
  *  ******************************************************************
  */
 const redis = require('./configs/redis.config.js')(logger);
@@ -52,9 +52,9 @@ app.use((req, res, next) => {
 
 /**
  *  ******************************************************************
- *  verify token as middleware
- *  so every single request need key on query '?key=<GATE_TOKEN>'
- *  using this is not make sense
+ *  generate gateway token
+ *  so every single request need key 'x-gateway-key' on header
+ *  to tell the service, the request is from gateway
  *  ******************************************************************
  */
 const gateway = require('./configs/gateway.config.js');

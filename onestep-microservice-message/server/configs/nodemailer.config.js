@@ -14,10 +14,10 @@ const generated = () => {
 			},
 		}
 		let transporter = nodemailer.createTransport(mg(auth))
-		console.log('generate transporter success')
+		console.log('[Nodemailer] generate transporter success')
 		return transporter
 	} catch (err) {
-		console.log('generate transporter failed')
+		console.log('[Nodemailer] generate transporter failed')
 		return
 	}
 }

@@ -31,5 +31,4 @@ const pinoConfig = (isProduction) => {
   return logger;
 };
 
-
 module.exports = pinoConfig;

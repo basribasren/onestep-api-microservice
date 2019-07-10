@@ -7,17 +7,17 @@ module.exports = function (passport, userService, helper) {
 			callbackURL: `${process.env.API_PATH}/v1/auth/google/callback`,
 		},
 		function (accessToken, refreshToken, profile, done) {
-			// _json:
-			// {
-			// 	sub: '104047142913419639930',
-			// 	name: 'Basri Basren',
-			// 	given_name: 'Basri',
-			// 	family_name: 'Basren',
-			// 	picture: 'https://lh5.googleusercontent.com/-RASNdqCDgfI/AAAAAAAAAAI/AAAAAAAAAAs/6Z049T1FJ2Q/photo.jpg',
-			// 	email: 'basri.basreen@gmail.com',
-			// 	email_verified: true,
-			// 	locale: 'en'
-			// }
+			/** _json:
+			{
+				sub: '104047142913419639930',
+				name: 'Basri Basren',
+				given_name: 'Basri',
+				family_name: 'Basren',
+				picture: 'https://lh5.googleusercontent.com/-RASNdqCDgfI/AAAAAAAAAAI/AAAAAAAAAAs/6Z049T1FJ2Q/photo.jpg',
+				email: 'basri.basreen@gmail.com',
+				email_verified: true,
+				locale: 'en'
+			}*/
 			const data = {
 				username: profile._json.email,
 				email: profile._json.email,

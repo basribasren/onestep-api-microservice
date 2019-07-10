@@ -15,8 +15,7 @@ const connection = () => {
 		// const sequelize = new Sequelize('postgres://user:pass@example.com:5432/dbname');
 		return sequelize
 	} catch (err) {
-		console.log('Error while trying create sequelize connection')
-		return console.log('SEQUELIZE Error:' + err.message)
+		return console.log('[SQL] Error while trying create sequelize connection ' + err.message)
 	}
 }
 

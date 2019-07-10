@@ -1,5 +1,4 @@
-// Add this to the VERY top of the first 
-// file loaded in your app
+// Add this to the VERY top of the first file loaded in your app
 const apm = require('elastic-apm-node')
 
 const running = (isProduction, logger) => {
@@ -10,10 +9,8 @@ const running = (isProduction, logger) => {
 				// Allowed characters: a-z, A-Z, 0-9, -, _, 
 				// and space
 				serviceName: process.env.AMP_SERVICE,
-
 				// Use if APM Server requires a token
 				secretToken: '',
-
 				// Set custom APM Server URL
 				// Default: http://localhost:8200
 				serverUrl: process.env.AMP_URL,
@@ -24,6 +21,5 @@ const running = (isProduction, logger) => {
 		return apm.captureError(logger.error('APM Error:' + err.message))
 	}
 }
-
 
 module.exports = running

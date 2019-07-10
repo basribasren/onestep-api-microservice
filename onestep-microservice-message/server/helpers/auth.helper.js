@@ -18,10 +18,10 @@ export const verifyToken = (req, res, next) => {
 		}
 		const data = jwt.verify(token, process.env.SECRET);
 		req.user = data.user;
-		console.log('verify on token user success...')
+		console.log('[AUTH] verify on token user success...')
 		next();
 	} catch (err) {
-		console.log('verify on token user failed!')
+		console.log('[AUTH] verify on token user failed!')
 		res.status(401).send({
 			message: 'Token is not valid',
 			url: req.url,

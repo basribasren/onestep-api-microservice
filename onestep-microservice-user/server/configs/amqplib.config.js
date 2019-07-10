@@ -1,7 +1,7 @@
 const amqp = require('amqplib');
 /**
  * command to get list plugins: rabbitmq-plugins list
- * command to acrive GUI: rabbitmq-plugins enable rabbitmq_management 
+ * command to active GUI: rabbitmq-plugins enable rabbitmq_management 
  * default port rabbitmq: http://localhost:15672/
  * default user: guest
  * default pass: guest
@@ -15,10 +15,10 @@ const createConnection = async () => {
     try {
         const connection = await amqp.connect({
             protocol: 'amqp',
-            hostname: 'localhost',
-            port: 5672,
-            username: 'guest',
-            password: 'guest',
+            hostname: process.env.AMQP_HOST,
+            port: process.env.AMQP_PORT,
+            username: process.env.AMQP_USER,
+            password: process.env.AMQP_PASS,
             locale: 'en_US',
             frameMax: 0,
             heartbeat: 0,
@@ -164,7 +164,5 @@ function publish(exchange, routingKey, content) {
   }
 }
 */
-
-
 
 module.exports = { createConnection, createChannel, createQueue }

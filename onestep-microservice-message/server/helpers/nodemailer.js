@@ -146,7 +146,7 @@ export const generateMessage = async data => {
 		let message = Object.assign(header, body)
 		return message
 	} catch (err) {
-		throw new Error('generate message failed!')
+		throw new Error('[Nodemailer] generate message failed!')
 	}
 }
 
@@ -157,10 +157,9 @@ export const generateMessage = async data => {
  */
 export const sendMessage = async (transporter, message) => {
 	try {
-		console.log(transporter)
 		let info = await transporter.sendMail(message)
 		return info
 	} catch (err) {
-		throw new Error('send message failed!')
+		throw new Error('[Nodemailer] send message failed!')
 	}
 }

@@ -53,31 +53,18 @@ app.set('amqp.channel', channel)
  * ******************************************************************
  */
 const user = require('./modules/user/user.routes.js');
+const admin = require('./modules/admin/admin.routes.js');
 const auth = require('./modules/auth/auth.routes.js');
+const email = require('./modules/email/email.routes.js');
 
 /**
  *  ******************************************************************
  *  cek for mysql connection and sync database
  *  ******************************************************************
  */
-mysql
-	.authenticate()
-	.then(() => {
-		console.log('Connection has been established successfully.')
-	})
-	.catch((err) => {
-		console.log(`${err.name}: Unable to connect to the database`)
-	});
-
-// Synchronizing any model changes with database.
-mysql
-	.sync()
-	.then(() => {
-		console.log('Database synchronized')
-	})
-	.catch((err) => {
-		console.log(`${err.name}: Database synchronized failed!`)
-	});
+const cekSQL = require('./helpers/sequelize.helper.js')
+cekSQL.authenticate(mysql)
+cekSQL.synchronized(mysql)
 
 /**
  *  ******************************************************************
@@ -100,8 +87,10 @@ app.get('/api/v1/test', (req, res) => {
 	});
 });
 
-app.use('/api/v1/user', user);
+app.use('/api/v1/user', user); // ['GET', 'POST', 'PUT', 'DELETE']
+app.use('/api/v1/admin', admin); // ['POST', PUT]
 app.use('/api/v1/auth', auth);
+app.use('/api/v1/email', email);
 
 /**
  *  ******************************************************************

@@ -16,6 +16,7 @@ paths:
           description: Authorization information is missing or invalid.
         '5XX': 
           description: Internal server error
+
     post:
       tags: 
         - User
@@ -24,14 +25,12 @@ paths:
       description: >
         Create a user.
       requestBody:
-        description: id, username, email, and verified is required
+        description: username, email, and password is required
         required: true
         content:
           application/json:
             schema:
               $ref: '#/components/schemas/UserSchema'
-      # security:
-        # - ApiKeyAuth: []
       responses:
         '200':
           description: Request Success
@@ -56,6 +55,8 @@ paths:
       summary: Get user by username
       description: >
         A detail user of the user.
+      security:
+        - ApiKeyAuth: []
       responses:
         '200':
           description: Request Success
@@ -71,17 +72,13 @@ paths:
       summary: Update user by username
       description: >
         Update a user of the user.
+      security:
+        - ApiKeyAuth: []
       requestBody:
         description: id, username, email, and verified is required
         required: true
         content:
-          multipart/form-data:
-            schema:
-              $ref: '#/components/schemas/UserSchema'
           application/json:
-            schema:
-              $ref: '#/components/schemas/UserSchema'
-          application/xml:
             schema:
               $ref: '#/components/schemas/UserSchema'
       responses:
@@ -99,6 +96,8 @@ paths:
       summary: Delte user by username
       description: >
         Delte a user of the user.
+      security:
+        - ApiKeyAuth: []
       responses:
         '200':
           description: Request Success

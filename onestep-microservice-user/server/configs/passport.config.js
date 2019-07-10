@@ -15,19 +15,24 @@ const passportConfig = function () {
 		require('./passport/github.config.js')(passport, userService, helper);
 		require('./passport/facebook.config.js')(passport, userService, helper);
 		require('./passport/google.config.js')(passport, userService, helper);
-		// Only necessary when using sessions.
-		// This tells Passport how or what data to save about a user in the session cookie.
-		// It's recommended you only serialize something like a unique username or user ID.
-		// I prefer user ID.
+		/**
+		 * Only necessary when using sessions.
+		 * This tells Passport how or what data to save about a user in the session cookie.
+		 * It's recommended you only serialize something like a unique username or user ID.
+		 * I prefer user ID.
+		 */
 		passport.serializeUser((token, done) => {
 			done(null, token);
 		});
 
-		// Only necessary when using sessions.
-		// This tells Passport how to turn the user ID we serialize in the session cookie
-		// back into the actual User record from our Mongo database.
-		// Here, we simply find the user with the matching ID and return that.
-		// This will cause the User record to be available on each authenticated request via the req.user property.
+		/**
+		 * Only necessary when using sessions.
+		 * This tells Passport how to turn the user ID we serialize in the session cookie
+		 * back into the actual User record from our Mongo database.
+		 * Here, we simply find the user with the matching ID and return that.
+		 * This will cause the User record to be available on each authenticated request 
+		 * via the req.user property.
+		 */
 		passport.deserializeUser((token, done) => {
 			const data = jwt.verify(token, process.env.TOKEN_SECRET);
 			const id = data.user.id;
@@ -41,7 +46,7 @@ const passportConfig = function () {
 		});
 		return passport
 	} catch (err) {
-		console.log('Error while trying create passport configuration')
+		console.log('[Passport] Error while trying create passport configuration')
 		return passport
 	}
 }

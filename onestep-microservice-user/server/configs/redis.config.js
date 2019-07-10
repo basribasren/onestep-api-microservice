@@ -6,14 +6,6 @@ const redis = require('redis');
  * don't need close connection when error
  * @return {[type]} [description]
  */
-const onError = () => {
-  console.log('Connected to Redis failed!')
-};
-
-const onConnect = () => {
-  console.log('Connected to Redis success!')
-};
-
 const redisConfig = () => {
   const HOST = process.env.REDIS_HOST || "127.0.0.1";
   const PORT = process.env.REDIS_PORT || 6379;
@@ -29,9 +21,12 @@ const redisConfig = () => {
     return_buffers: false,
   });
 
-
-  client.on('error', onError);
-  client.once('connect', onConnect);
+  client.on('error', () => {
+    console.log('[REDIS] Connected to Redis failed!')
+  });
+  client.once('connect', () => {
+    console.log('[REDIS] Connected to Redis success!')
+  });
   return client;
 };
 

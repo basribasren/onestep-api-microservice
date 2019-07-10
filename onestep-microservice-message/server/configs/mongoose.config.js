@@ -31,14 +31,14 @@ const mongooseConfig = () => {
 	 * 	}
 	 */
 	mongoose.connection.on('error', () => {
-		console.log('connection to database failed!')
+		console.log('[Mongoose] connection to database failed!')
 		mongoose.connection.close()
 	})
 	mongoose.connection.on('connected', () => {
-		console.log('connection to database success...')
+		console.log('[Mongoose] connection to database success...')
 	})
 	mongoose.connection.on('disconnected', () => {
-		console.log('trying reconnect to database...')
+		console.log('[Mongoose] trying reconnect to database...')
 		mongoose.connect(uri, configuration)
 	})
 	return mongoose

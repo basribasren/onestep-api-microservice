@@ -13,9 +13,9 @@ components:
     UserSchema:
       type: object
       properties:
-        id:
-          type: integer
-          example: 1
+        # id:
+          # type: integer
+          # example: 1
         username:
           type: string
           example: cengkir.lestari65
@@ -25,47 +25,33 @@ components:
         password: 
           type: string
           example: wlkjsdfrnkajsdnw
-        role:
-          type: string
-          example: user
-        verified:
-          type: boolean
-          example: false
-        created_at:
-          type: string
-          format: date-time
-        updated_at:
-          type: string
-          format: date-time
-        deleted_at:
-          type: string
-          format: date-time
+        # role:
+          # type: string
+          # example: user
+        # verified:
+          # type: boolean
+          # example: false
+        # created_at:
+          # type: string
+          # format: date-time
+        # updated_at:
+          # type: string
+          # format: date-time
+        # deleted_at:
+          # type: string
+          # format: date-time
       required:
-        - id
+        # - id
         - username
         - email
-        - role
-        - verified
-
-    UserPayload:
-      
+        - password
+        # - role
+        # - verified
 
   responses:
     UserSuccess:
       content:
         application/json:
-          schema: 
-            type: object
-            properties:
-              message:
-                type: string
-                example: Load resource success
-              data:
-                $ref: '#/components/schemas/UserSchema'
-              status:
-                type: number
-                example: 200
-        application/xml: 
           schema: 
             type: object
             properties:

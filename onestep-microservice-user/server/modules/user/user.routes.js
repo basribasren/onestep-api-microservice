@@ -1,4 +1,5 @@
 const express = require('express');
+
 const router = express.Router();
 const userController = require('./user.controller.js');
 const ACL = require('../../helpers/rbac.helper.js');
@@ -18,6 +19,5 @@ router.put('/:username', helper.verifyToken, ACL, userController.update);
 
 // DELETE /api/v1/user/:username
 router.delete('/:username', helper.verifyToken, ACL, userController.remove);
-
 
 module.exports = router;

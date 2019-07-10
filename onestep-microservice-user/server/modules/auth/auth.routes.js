@@ -4,6 +4,8 @@ const authController = require('./auth.controller.js');
 
 const router = Router();
 
+router.post('/change-password/:jwt', authController.changePassword);
+
 // POST /api/v1/auth/login
 router.post('/login', authController.login);
 

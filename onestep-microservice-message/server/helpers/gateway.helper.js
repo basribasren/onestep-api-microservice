@@ -11,10 +11,10 @@ const verifyGateway = (req, res, next) => {
     }
     try {
         const data = jwt.verify(key, process.env.GATE_SECRET);
-        console.log('verify on token gateway success...')
+        console.log('[GATEWAY] verify on token gateway success...')
         next();
     } catch (err) {
-        console.log('verify on token gateway failed!')
+        console.log('[GATEWAY] verify on token gateway failed!')
         res.status(401).send({
             message: 'Key is not valid',
             url: req.baseUrl,

@@ -29,4 +29,13 @@ userHelper.generateToken = (user) => {
 	return token;
 };
 
+userHelper.verifyToken = (data) => {
+	try {
+		const user = jwt.verify(data, process.env.TOKEN_SECRET);
+		return user
+	} catch (err) {
+		throw new Error('verify token failed')
+	}
+}
+
 module.exports = userHelper;

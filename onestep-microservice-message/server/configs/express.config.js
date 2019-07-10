@@ -28,10 +28,10 @@ const expressConfig = app => {
 		app.use(helmet())
 		// Records the response time for requests in HTTP servers {x-response-time →376.293ms}
 		app.use(responseTime())
-		console.log('Express init configuration success load...')
+		console.log('[Express] init configuration success load...')
 		return app
 	} catch (err) {
-		console.log('Express init configuration failed load!')
+		console.log('[Express] init configuration failed load!')
 		return app
 	}
 }

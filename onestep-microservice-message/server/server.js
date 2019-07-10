@@ -3,15 +3,18 @@ import path from 'path'
 import favicon from 'serve-favicon'
 import serveStatic from 'serve-static'
 import dotenv from 'dotenv'
+
 /** import configurations */
 import mongoose from './configs/mongoose.config.js'
 import swagger from './configs/swagger.config.js'
 import init from './configs/express.config.js'
 import twilio from './configs/twilio.config.js'
 import amqp from './configs/amqplib.config.js'
+
 /** import routes */
 import email from './modules/email/email.routes.js'
 // import sms from './modules/sms/sms.routes.js'
+
 /** import helpers */
 import gateway from './helpers/gateway.helper.js'
 import * as amqpHelper from './helpers/amqplib.helper.js'
@@ -26,6 +29,8 @@ const app = express()
 dotenv.config()
 
 const isProduction = process.env.NODE_ENV === 'production'
+const STATIC_FOLDER = 'client/dist'
+const STATIC_SWAGGER = 'api-docs/swagger-ui'
 
 /**
  *  ******************************************************************
@@ -48,26 +53,26 @@ const mongooseConnection = mongoose()
  *  amqp configuration and set as global variabel
  *  ******************************************************************
  */
-let connection = amqp.createConnection();
-let channel = amqp.createChannel(connection)
-let queue = amqp.createQueue(channel, 'message-queue')
+const amqpConnection = amqp.createConnection()
+const amqpChannel = amqp.createChannel(amqpConnection)
+const amqpQueue = amqp.createQueue(amqpChannel, 'message-queue')
 
-app.set('amqp.connection', connection)
-app.set('amqp.channel', channel)
+app.set('amqp.connection', amqpConnection)
+app.set('amqp.channel', amqpChannel)
+amqpHelper.consumeEmail({
+	connection: amqpConnection,
+	channel: amqpChannel,
+	queueName: 'message-queue',
+})
 
 /**
  *  ******************************************************************
- *  set variabel
+ *  set twilio as global variabel
  *  ******************************************************************
  */
-const STATIC_FOLDER = 'client/dist'
-const STATIC_SWAGGER = 'api-docs/swagger-ui'
-
 const twilioClient = twilio(isProduction)
-app.use((req, res, next) => {
-	req.twilio = twilioClient
-	next()
-})
+app.set('twilio.client', twilioClient)
+
 /**
  *  ******************************************************************
  *  express default configuration
@@ -111,12 +116,6 @@ app.use('/api/v1/swagger', serveStatic(path.resolve(__dirname, STATIC_SWAGGER)))
 app.use('/api/v1/email', email)
 // app.use('/api/v1/sms', sms)
 
-amqpHelper.consume({
-	connection: connection,
-	channel: channel,
-	queueName: 'message-queue'
-})
-
 /**
  * error handler when url not found
  * @param  {[type]} res   [description]
@@ -132,6 +131,7 @@ app.use((req, res, next) => {
  * @param  {[type]} req   [description]
  */
 app.use((err, req, res, next) => {
+	console.log('[REQ] request error!')
 	res.status(err.statusCode || 500).json({
 		message: err.message,
 		status: err.statusCode,

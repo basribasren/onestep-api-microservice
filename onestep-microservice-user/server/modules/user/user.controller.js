@@ -1,6 +1,6 @@
 const userService = require('./user.service.js');
+const emailService = require('../email/email.service.js');
 const helper = require('../../helpers/user.helper.js');
-const amqpHelper = require('../../helpers/amqplib.helper.js');
 const redis = require('../../configs/redis.config.js');
 
 const client = redis();
@@ -84,19 +84,29 @@ const userController = {
             }
         })
     },
+
     create: (req, res, next) => {
         generateData(req.body, 'user')
             .then(data => {
                 return userService.create(data)
             })
-            .then((result) => {
-                delete result.password;
-                // send information to message-service by message-queue
-                amqpHelper.send({
-                    connection: req.app.get('amqp.connection'),
-                    channel: req.app.get('amqp.channel'),
-                    queueName: 'message-queue',
-                }, result)
+            .then((user) => {
+                try {
+                    delete user.password;
+                    const jwt = helper.generateToken({ email: user.email })
+                    emailService.sendVerifyEmail({
+                        connection: req.app.get('amqp.connection'),
+                        channel: req.app.get('amqp.channel'),
+                        queueName: 'message-queue',
+                    }, user.email, jwt)
+                    return user
+                } catch (err) {
+                    // if amqp failed then delete the user
+                    userService.remove(user.username)
+                    throw new Error('Create User failed : AMQP Error')
+                }
+            })
+            .then(result => {
                 res.status(201).send({
                     message: 'create user success',
                     data: result,

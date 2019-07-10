@@ -1,3 +1,4 @@
+import emailService from '../modules/email/email.service.js'
 /**
  * #sendToQueue(queue, content, [options])
  * Send a single message with the content given as a buffer 
@@ -28,16 +29,14 @@ export const send = async (amqp, msg) => {
  * (i.e., you will be expected to acknowledge messages).
  */
 
-const _processMessage = (message) => {
-    var temp = JSON.parse(message.content.toString());
-    console.log(temp)
-}
-
-export const consume = async (amqp) => {
+export const consumeEmail = async (amqp) => {
     const connection = await amqp.connection
     const channel = await amqp.channel
     try {
-        channel.consume(amqp.queueName, _processMessage, { noAck: true })
+        channel.consume(amqp.queueName, function(message) {
+            let temp = JSON.parse(message.content.toString());
+            return emailService.send(temp)
+        }, { noAck: true })
     } catch (err) {
         console.error("[AMQP] consume message error:", err);
         connection.close();

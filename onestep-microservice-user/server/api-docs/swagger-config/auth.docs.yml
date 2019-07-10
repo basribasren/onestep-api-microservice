@@ -8,13 +8,10 @@ paths:
       description: >
         Login to system.      
       requestBody:
-        description: username and email is required to be sendmail
+        description: username and email is required
         required: true
         content:
           application/json:
-            schema:
-              $ref: '#/components/schemas/LoginSchema'
-          application/xml:
             schema:
               $ref: '#/components/schemas/LoginSchema'
       responses:
