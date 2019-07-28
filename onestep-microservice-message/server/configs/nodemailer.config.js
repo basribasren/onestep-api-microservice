@@ -1,5 +1,6 @@
 import nodemailer from 'nodemailer'
 import mg from 'nodemailer-mailgun-transport'
+
 /**
  * send e-mails from Node.js – easy as cake! 🍰✉️
  * using nodemailer-mailgun-transport with nodemailer to send email using Mailgun's awesomeness! 

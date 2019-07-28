@@ -1,7 +1,7 @@
 import mongoose from 'mongoose'
 
-const mongooseConfig = () => {
-	if (process.env.APP_ENV === 'development') {
+const mongooseConfig = (isProduction, log) => {
+	if (!isProduction) {
 		mongoose.set('debug', true)
 	}
 	let uri = process.env.DB_MONGOODB_URI || 'mongodb://localhost:27017/sample'
@@ -31,14 +31,14 @@ const mongooseConfig = () => {
 	 * 	}
 	 */
 	mongoose.connection.on('error', () => {
-		console.log('[Mongoose] connection to database failed!')
+		log.error('[Mongoose]', '#20#', 'connection to database failed!')
 		mongoose.connection.close()
 	})
 	mongoose.connection.on('connected', () => {
-		console.log('[Mongoose] connection to database success...')
+		log.success('[Mongoose]', 'success connect to mongo database')
 	})
 	mongoose.connection.on('disconnected', () => {
-		console.log('[Mongoose] trying reconnect to database...')
+		log.warning('[Mongoose]', '20#', 'trying reconnect to database...')
 		mongoose.connect(uri, configuration)
 	})
 	return mongoose

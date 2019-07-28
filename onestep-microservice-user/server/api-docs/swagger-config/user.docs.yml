@@ -1,5 +1,5 @@
 paths:
-  /api/v1/user/:
+  /api/v1/user/list:
     get:
       tags: 
         - User
@@ -17,6 +17,7 @@ paths:
         '5XX': 
           description: Internal server error
 
+  /api/v1/user/:
     post:
       tags: 
         - User

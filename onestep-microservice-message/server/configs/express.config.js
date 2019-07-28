@@ -6,7 +6,7 @@ import helmet from 'helmet'
 import cookieParser from 'cookie-parser'
 import responseTime from 'response-time'
 
-const expressConfig = app => {
+const expressConfig = (app, log) => {
 	try {
 		// Compress all responses
 		app.use(compression())
@@ -28,11 +28,11 @@ const expressConfig = app => {
 		app.use(helmet())
 		// Records the response time for requests in HTTP servers {x-response-time →376.293ms}
 		app.use(responseTime())
-		console.log('[Express] init configuration success load...')
+
 		return app
 	} catch (err) {
-		console.log('[Express] init configuration failed load!')
+		log.failed('[Express]', '#EX201', 'Error while trying init express configuration')
 		return app
 	}
 }
-module.exports = expressConfig
+export default expressConfig

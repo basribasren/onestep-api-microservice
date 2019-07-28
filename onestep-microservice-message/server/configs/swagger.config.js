@@ -1,5 +1,6 @@
 import path from 'path'
 import swaggerJSDoc from 'swagger-jsdoc'
+
 /**
  * Swagger definition.
  */
@@ -11,6 +12,15 @@ const swaggerDefinition = {
 		description: process.env.APP_DESCRIPTION,
 	},
 	basePath: '/',
+	components: {
+		securitySchemes: {
+			ApiKeyAuth: {
+				type: 'apiKey',
+				in: 'query',
+				name: 'token',
+			}
+		},
+	}
 }
 
 
@@ -30,14 +40,14 @@ const swaggerOptions = {
 /**
  * Initialize swagger-jsdoc.
  */
-const generateSwagger = () => {
+const generateSwagger = (log) => {
 	try {
 		const swaggerSpec = swaggerJSDoc(swaggerOptions)
+		log.success('[SWAGGER]', 'success creating swagger definition')
 		return swaggerSpec
 	} catch (err) {
-		console.log('[Swagger] defining swagger failed!')
-		return
+		return log.failed('[SWAGGER]', '#EX204', `Error while creating swagger definition`)
 	}
 }
 
-export default generateSwagger
+export default { generateSwagger }

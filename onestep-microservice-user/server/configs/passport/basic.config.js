@@ -5,7 +5,7 @@ module.exports = (passport, userService, helper) => {
 		userService.get(userid)
 			.then((account) => {
 				if (!account) {
-					throw new Error(`user with ${username} is not found`);
+					throw new Error(`user with ${userid} is not found`);
 				}
 				dataUser = account;
 				return helper.comparePassword(password, account.password);

@@ -4,15 +4,19 @@ const authController = require('./auth.controller.js');
 
 const router = Router();
 
+// [POST] /api/v1/auth/change-password/:jwt
 router.post('/change-password/:jwt', authController.changePassword);
 
-// POST /api/v1/auth/login
+// [POST] /api/v1/auth/verify-email/:jwt
+router.post('/verify-email/:jwt', authController.verifyEmail);
+
+// [POST] /api/v1/auth/login
 router.post('/login', authController.login);
 
-// POST /api/v1/auth/add
+// [POST] /api/v1/auth/add
 router.post('/logout', authController.logout);
 
-// // POST /api/v1/auth/local
+// [POST] /api/v1/auth/local
 router.post('/local', passport.authenticate('local'),
 	function (req, res) {
 		res.status(200).send({
@@ -28,12 +32,7 @@ router.get('/basic', passport.authenticate('basic', { session: false }),
 		res.status(200).send({
 			message: 'login success',
 			data: {
-				token: req.user,
-				host: req.headers.host,
-				cookie: req.headers.cookie,
-				baseUrl: req.baseUrl,
-				originalUrl: req.originalUrl,
-				originalMethod: req.originalMethod
+				token: req.user
 			},
 		});
 	});

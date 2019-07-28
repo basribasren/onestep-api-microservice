@@ -1,12 +1,11 @@
 const bcrypt = require('bcryptjs');
 const jwt = require('jsonwebtoken');
 
-const userHelper = {};
 /**
  * generate hash of password
  * return promises pending
  */
-userHelper.generatePassword = (password) => {
+const generatePassword = (password) => {
 	const hash = bcrypt
 		.genSalt(10)
 		.then(salt => bcrypt.hash(password, salt))
@@ -18,18 +17,18 @@ userHelper.generatePassword = (password) => {
  * compare password input with hash result
  * return promise pending
  */
-userHelper.comparePassword = (password, hash) => bcrypt.compare(password, hash);
+const comparePassword = (password, hash) => bcrypt.compare(password, hash);
 
 /**
  * generate token with user account
  * expiresIn Eg: 60, "2 days", "10h", "7d"
  */
-userHelper.generateToken = (user) => {
+const generateToken = (user) => {
 	const token = jwt.sign({ user }, process.env.TOKEN_SECRET, { expiresIn: '7d' });
 	return token;
 };
 
-userHelper.verifyToken = (data) => {
+const verifyToken = (data) => {
 	try {
 		const user = jwt.verify(data, process.env.TOKEN_SECRET);
 		return user
@@ -38,4 +37,9 @@ userHelper.verifyToken = (data) => {
 	}
 }
 
-module.exports = userHelper;
+module.exports = {
+	generatePassword,
+	comparePassword,
+	generateToken,
+	verifyToken
+};

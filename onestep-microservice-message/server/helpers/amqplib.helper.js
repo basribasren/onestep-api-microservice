@@ -28,7 +28,6 @@ export const send = async (amqp, msg) => {
  * as soon as they’ve been sent down the wire. Defaults to false 
  * (i.e., you will be expected to acknowledge messages).
  */
-
 export const consumeEmail = async (amqp) => {
     const connection = await amqp.connection
     const channel = await amqp.channel

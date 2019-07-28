@@ -3,7 +3,7 @@ const path = require('path');
 const uuidv1 = require('uuid/v1');
 const favicon = require('serve-favicon');
 const serveStatic = require('serve-static');
-const httpStatus = require('http-status-codes');
+const gateway = require('./configs/gateway.config.js');
 
 const app = express();
 /**
@@ -14,6 +14,9 @@ const app = express();
 require('dotenv').config();
 const isProduction = process.env.NODE_ENV === 'production';
 const randomNumber = uuidv1();
+const GATEWAY_TOKEN = gateway.generateKey(randomNumber);
+const ENABLE_AMP = false;
+const ENABLE_REDIS = true;
 
 /**
  *  ******************************************************************
@@ -28,37 +31,23 @@ app.use((req, res, next) => {
 
 /**
  * ******************************************************************
- * set application performance monitoring (APM)
+ * set application performance monitoring (APM) with elastichsearch
+ * if you want to enable this feature, you need prepare this:
+ * # install, up and running elastichsearch
+ * # install, up and running kibana
+ * # install, up and running apm-server
  * ******************************************************************
  */
-const apm = require('./profiling/elastic.apm.js')(isProduction, logger);
+const apm = require('./profiling/elastic.apm.js')(logger, ENABLE_AMP);
 
 /**
  *  ******************************************************************
  *  connnection to redis for caching
+ *  if you want to enable this feature, you need prepare this:
+ *  install, up and running redis
  *  ******************************************************************
  */
-const redis = require('./configs/redis.config.js')(logger);
-
-/**
- *  ******************************************************************
- *  set http-status-code as middleware
- *  ******************************************************************
- */
-app.use((req, res, next) => {
-	req.status = httpStatus;
-	next();
-});
-
-/**
- *  ******************************************************************
- *  generate gateway token
- *  so every single request need key 'x-gateway-key' on header
- *  to tell the service, the request is from gateway
- *  ******************************************************************
- */
-const gateway = require('./configs/gateway.config.js');
-const gatewayToken = gateway.generateKey(randomNumber);
+const redis = require('./configs/redis.config.js')(logger, ENABLE_REDIS);
 
 /**
  *  ******************************************************************
@@ -84,7 +73,7 @@ const session = require('./configs/session.config.js')(app, redis);
 app.get('/', (req, res, next) => {
 	res.redirect('/api/v1/swagger')
 })
-require('./service/user.service.js')(app, gatewayToken);
+require('./service/user.service.js')(app, GATEWAY_TOKEN);
 
 /**
  *  ******************************************************************

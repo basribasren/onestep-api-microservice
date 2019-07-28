@@ -14,10 +14,11 @@ const send = async (amqpData) => {
 		let message = await helper.generateMessage(data)
 		// let info = await helper.sendMessage(transporter, message)
 		let result = {
-			message: 'Email ${info.messageId} has been send',
+			message: `Email ${info.messageId} has been send`,
 			data: data,
 		}
-		return console.log(result)
+		console.log(result)
+		return result
 	} catch (err) {
 		return console.log(err)
 	}

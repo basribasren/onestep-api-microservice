@@ -1,9 +1,9 @@
 // Add this to the VERY top of the first file loaded in your app
 const apm = require('elastic-apm-node')
 
-const running = (isProduction, logger) => {
+const running = (logger, enable) => {
 	try {
-		if (!isProduction) {
+		if (enable) {
 			apm.start({
 				// Override service name from package.json 
 				// Allowed characters: a-z, A-Z, 0-9, -, _, 
@@ -18,7 +18,7 @@ const running = (isProduction, logger) => {
 			})
 		}
 	} catch (err) {
-		return apm.captureError(logger.error('APM Error:' + err.message))
+		return apm.captureError(logger.error('[APM] Error:' + err.message))
 	}
 }
 

@@ -28,6 +28,7 @@ const getPermissionAny = (method, role, source) => {
 		return rbac.can(role).deleteAny(source);
 	}
 }
+
 const getPermissionOwn = (method, role, source) => {
 	if (method === 'GET') {
 		return rbac.can(role).readOwn(source);

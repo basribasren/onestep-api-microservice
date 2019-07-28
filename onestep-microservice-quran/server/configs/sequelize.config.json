@@ -1,0 +1,35 @@
+{
+	"development":
+	{
+		"username": "root",
+		"password": null,
+		"database": "quran_dev",
+		"host": "127.0.0.1",
+		"dialect": "mysql",
+		"operatorsAliases": false,
+		"pool":
+		{
+			"max": 10,
+			"min": 0,
+			"idle": 10000
+		}
+	},
+	"test":
+	{
+		"username": "root",
+		"password": null,
+		"database": "quran_test",
+		"host": "127.0.0.1",
+		"dialect": "mysql",
+		"operatorsAliases": false
+	},
+	"production":
+	{
+		"username": "root",
+		"password": null,
+		"database": "quran_prod",
+		"host": "127.0.0.1",
+		"dialect": "mysql",
+		"operatorsAliases": false
+	}
+}

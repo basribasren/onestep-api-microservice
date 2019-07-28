@@ -9,6 +9,13 @@ const userService = (app, token) => {
 			changeOrigin: true,
 			logLevel: 'debug',
 			onProxyReq: (proxyReq, req) => {
+				/**
+				 *  ******************************************************************
+				 *  generate gateway token
+				 *  so every single request need key 'x-gateway-key' on header
+				 *  to tell the service, the request is from gateway
+				 *  ******************************************************************
+				 */
 				proxyReq.setHeader('x-gateway-key', token)
 				if (req.body) {
 					const bodyData = JSON.stringify(req.body);

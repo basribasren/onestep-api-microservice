@@ -40,7 +40,7 @@ const mergeConfiguration = (defaults, services) => {
 
 const getAndMerge = async (swaggerDefault) => {
 	/* get the child service swagger definition */
-	const userDefinition = await getConfiguration('http://localhost:3000/api/v1/user-docs.json');
+	const userDefinition = await getConfiguration(`${process.env.USER_PATH}/v1/user-docs.json`);
 	/* merge all swagger definition */
 	const swaggerFinal = mergeConfiguration(swaggerDefault, [swaggerDefault, userDefinition]);
 	return swaggerFinal

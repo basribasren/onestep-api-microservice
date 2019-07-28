@@ -1,6 +1,6 @@
 import jwt from 'jsonwebtoken'
 
-const verifyGateway = (req, res, next) => {
+export const verifyGateway = (req, res, next) => {
     const key = req.headers['x-gateway-key'];
     if (!key) {
         return res.status(401).send({
@@ -22,5 +22,3 @@ const verifyGateway = (req, res, next) => {
         });
     }
 };
-
-export default verifyGateway

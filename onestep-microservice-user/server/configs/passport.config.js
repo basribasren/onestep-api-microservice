@@ -1,5 +1,6 @@
 const passport = require('passport');
 const jwt = require('jsonwebtoken');
+const log = require('../helpers/logger.helper.js')
 
 const passportConfig = function () {
 	try {
@@ -46,7 +47,7 @@ const passportConfig = function () {
 		});
 		return passport
 	} catch (err) {
-		console.log('[Passport] Error while trying create passport configuration')
+		log.failed('[Passport]', '#EX202', 'Error while trying create passport configuration')
 		return passport
 	}
 }

@@ -1,9 +1,7 @@
 const userService = require('./user.service.js');
 const emailService = require('../email/email.service.js');
 const helper = require('../../helpers/user.helper.js');
-const redis = require('../../configs/redis.config.js');
-
-const client = redis();
+const uuidv1 = require('uuid/v1');
 
 /**
  * generate data
@@ -13,6 +11,9 @@ const client = redis();
 const generateData = (data, role) => {
     return helper.generatePassword(data.password)
         .then((hash) => {
+            if (!data.username) {
+                data.username = generateUsername()
+            }
             const user = {
                 username: data.username,
                 password: hash,
@@ -26,8 +27,20 @@ const generateData = (data, role) => {
         })
 }
 
+/**
+ * if user register using passport,
+ * username will undefined. so, we'll
+ * create random username in initial.
+ * @return {[type]} [description]
+ */
+const generateUsername = () => {
+    const randomNumber = uuidv1();
+    return randomNumber
+}
+
 const userController = {
     get: (req, res, next) => {
+        const client = req.app.get('redis.connection')
         const key = `user:get:${req.params.username}`;
         client.get(key, (err, result) => {
             if (result) {
@@ -53,6 +66,7 @@ const userController = {
     },
 
     list: (req, res, next) => {
+        const client = req.app.get('redis.connection')
         const key = `user:list`;
         client.get(key, (err, result) => {
             if (result) {
@@ -91,20 +105,21 @@ const userController = {
                 return userService.create(data)
             })
             .then((user) => {
-                try {
-                    delete user.password;
-                    const jwt = helper.generateToken({ email: user.email })
-                    emailService.sendVerifyEmail({
+                delete user.password;
+                const jwt = helper.generateToken({ email: user.email })
+                return emailService.sendVerifyEmail({
                         connection: req.app.get('amqp.connection'),
                         channel: req.app.get('amqp.channel'),
                         queueName: 'message-queue',
                     }, user.email, jwt)
-                    return user
-                } catch (err) {
-                    // if amqp failed then delete the user
-                    userService.remove(user.username)
-                    throw new Error('Create User failed : AMQP Error')
-                }
+                    .then(() => {
+                        return user
+                    })
+                    .catch(err => {
+                        // if amqp failed then delete the user
+                        userService.remove(user.username)
+                        throw err
+                    })
             })
             .then(result => {
                 res.status(201).send({

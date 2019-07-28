@@ -95,6 +95,32 @@ const userService = {
                 throw new Error(`${err.name}: delete user failed!`);
             })
     },
+
+    /**
+     * using this in auth controller
+     * when user login usign passport
+     * this will create new account,
+     * if user still not register
+     * @param  {[type]} data [description]
+     * @return {[type]}      [description]
+     */
+    findOrCreate: (data) => {
+        return User.findOrCreate({
+                where: { email: data.email },
+                defaults: {
+                    username: data.username,
+                    email: data.email,
+                    role: 'user'
+                }
+            })
+            .then(([user, created]) => {
+                user.password = 'fake password' //set this to random number
+                return user.get({ plain: true })
+            })
+            .catch((err) => {
+                throw new Error(`${err.name}: get or craete user failed!`);
+            })
+    },
 };
 
 

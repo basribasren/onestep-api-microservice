@@ -1,0 +1,22 @@
+{
+  "short_name": "React App",
+  "name": "Create React App Sample",
+  "description": "Boilerplate for create web or pwa using react and redux",
+  "scope": "/",
+  "start_url": "/?utm_source=homescreen",
+  "display": "standalone",
+  "orientation": "any",
+  "theme_color": "#000000",
+  "background_color": "#ffffff",
+  "icons": [
+    {
+      "src": "favicon.ico",
+      "sizes": "64x64 32x32 24x24 16x16",
+      "type": "image/x-icon"
+    }
+  ],
+  "dir": "ltr",
+  "lang": "Indonesian",
+  "related_applications": [],
+  "prefer_related_applications": false
+}

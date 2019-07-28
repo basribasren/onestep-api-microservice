@@ -1,11 +1,12 @@
 const jwt = require('jsonwebtoken');
 const url = require('url');
 
+const gateway = {}
 /**
  * generate token with user account
  * expiresIn Eg: 60, "2 days", "10h", "7d"
  */
-const generateKey = (app) => {
+gateway.generateKey = (app) => {
 	const key = jwt.sign({ app }, process.env.GATE_SECRET, { expiresIn: '7d' });
 	return key;
 };
@@ -17,7 +18,7 @@ const generateKey = (app) => {
  * @param  {Function} next [description]
  * @return {[type]}        [description]
  */
-const verifyKey = (req, res, next) => {
+gateway.verifyKey = (req, res, next) => {
 	const path = url.parse(req.baseUrl).pathname
 	try {
 		const key = req.query.key;
@@ -41,4 +42,4 @@ const verifyKey = (req, res, next) => {
 	}
 };
 
-module.exports = { generateKey, verifyKey };
+module.exports = gateway

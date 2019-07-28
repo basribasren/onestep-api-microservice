@@ -1,4 +1,5 @@
 const Sequelize = require('sequelize');
+const log = require('../helpers/logger.helper.js')
 
 const connection = () => {
 	try {
@@ -10,12 +11,11 @@ const connection = () => {
 				dialect: process.env.SQL_DRIVER,
 				/* one of 'mysql' | 'mariadb' | 'postgres' | 'mssql' */
 			});
-
 		// Option 2: Passing a connection URI
 		// const sequelize = new Sequelize('postgres://user:pass@example.com:5432/dbname');
 		return sequelize
 	} catch (err) {
-		return console.log('[SQL] Error while trying create sequelize connection ' + err.message)
+		return log.failed('[SQL]', '#SQL201', `Error while trying create sequelize connection ${err.message}`)
 	}
 }
 

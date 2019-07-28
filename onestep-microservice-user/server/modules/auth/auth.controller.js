@@ -2,42 +2,37 @@ const user = require('../user/user.service.js');
 const helper = require('../../helpers/user.helper.js');
 
 const authController = {
-    verifyEmail: (req, res, next) => {
-        // how to verify
-    },
-
-    /**
-     * user mengklik link pada email yang telah dikirimkan
-     * sistem mengambil data pada param jwt
-     * user memasukkan password baru
-     * user memasukkan confirm password
-     * user mengklik button change password
-     * sistem membuat hash dari password
-     * sistem mengupdate account by email
-     */
     // [POST] http://localhost:3000/api/v1/auth/change-password/:jwt<account>
     changePassword: (req, res, next) => {
         let data = helper.verifyToken(req.params.jwt)
         helper.generatePassword(req.body.newPassword)
             .then(hash => {
-                return user.update(data.user.email)
+                return user.update(data.user.email, hash)
             })
             .then(account => {
                 delete account.password
                 res.status(201).send({
-                    message: 'please check your email for reset the password',
+                    message: 'chang password success',
                     data: account,
                 });
             })
             .catch(err => next(err))
     },
 
-    changeUsername: (req, res, next) => {
-        // how to change username
+    // [POST] http://localhost:3000/api/v1/auth/verify-email/:jwt<account>
+    verifyEmail: (req, res, next) => {
+        let data = helper.verifyToken(req.params.jwt)
+        user.update(data.user.email, { verified: true })
+            .then(account => {
+                delete account.password
+                res.status(201).send({
+                    message: 'verify email success',
+                    data: account,
+                });
+            })
+            .catch(err => next(err))
     },
-    changeRole: (req, res, next) => {
-        // how to change role
-    },
+
     /**
      * LOGIN - SKENARIO
      * @skenario 2 - get user by username

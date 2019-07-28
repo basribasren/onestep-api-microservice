@@ -1,3 +1,5 @@
+const log = require('./logger.helper.js')
+
 /**
  * #sendToQueue(queue, content, [options])
  * Send a single message with the content given as a buffer 
@@ -11,11 +13,11 @@ const send = async (amqp, msg) => {
     let message = Buffer.from(JSON.stringify(msg)); //change json to buffer
     try {
         channel.sendToQueue(amqp.queueName, message)
-        console.log("[AMQP] publish message success");
-        return
+        return log.success('[AMQP]', 'success publish message')
     } catch (err) {
-        console.error("[AMQP] publish message error:", err);
+        log.failed('[AMQP]', '#AMQP204', `publish message error ${err}`)
         connection.close();
+        throw new Error(`publish message error ${err}`)
     }
 }
 
@@ -29,19 +31,19 @@ const send = async (amqp, msg) => {
  */
 // amqp.consume(connection, channel, 'message-queue')
 const consume = async (amqp) => {
-    const connection = await amqp.connection
-    const channel = await amqp.channel
-    try {
-        channel.consume(amqp.queueName, _processMessage, { noAck: true })
-    } catch (err) {
-        console.error("[AMQP] consume message error:", err);
-        connection.close();
-    }
+    // const connection = await amqp.connection
+    // const channel = await amqp.channel
+    // try {
+    //     channel.consume(amqp.queueName, _processMessage, { noAck: true })
+    // } catch (err) {
+    //     log.failed('[AMQP]', '#AMQP205', `consume message error ${err}`)
+    //     connection.close();
+    // }
 }
 
-const _processMessage = (message) => {
-    var temp = JSON.parse(message.content.toString());
-    console.log(temp)
-}
+// const _processMessage = (message) => {
+//     let temp = JSON.parse(message.content.toString());
+//     console.log(temp)
+// }
 
 module.exports = { send, consume }

@@ -6,29 +6,31 @@ const redis = require('redis');
  * don't need close connection when error
  * @return {[type]} [description]
  */
-const redisConfig = (logger) => {
-  const HOST = process.env.REDIS_HOST || "127.0.0.1";
-  const PORT = process.env.REDIS_PORT || 6379;
+const redisConfig = (logger, enable) => {
+  if (enable) {
+    const HOST = process.env.REDIS_HOST || "127.0.0.1";
+    const PORT = process.env.REDIS_PORT || 6379;
 
-  if (process.env.REDIS_AUTH === "true") {
-    client.auth(process.env.REDIS_PASS);
+    if (process.env.REDIS_AUTH === "true") {
+      client.auth(process.env.REDIS_PASS);
+    }
+
+    const client = redis.createClient({
+      host: HOST,
+      port: PORT,
+      ttl: 260,
+      return_buffers: false,
+    });
+
+
+    client.on('error', () => {
+      logger.error('Connected to Redis failed!');
+    });
+    client.once('connect', () => {
+      logger.info('Connected to Redis success!');
+    });
+    return client;
   }
-
-  const client = redis.createClient({
-    host: HOST,
-    port: PORT,
-    ttl: 260,
-    return_buffers: false,
-  });
-
-
-  client.on('error', () => {
-    logger.error('Connected to Redis failed!');
-  });
-  client.once('connect', () => {
-    logger.info('Connected to Redis success!');
-  });
-  return client;
 };
 
 module.exports = redisConfig;
