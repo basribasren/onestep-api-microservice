@@ -39,7 +39,7 @@
     "method-override": "^3.0.0",
     "multer": "^1.4.1",
     "mysql2": "^1.6.5",
-    "node-fetch": "^2.6.0",
+    "node-fetch": "^2.6.7",
     "otplib": "^11.0.1",
     "passport": "^0.4.0",
     "passport-facebook": "^3.0.0",
